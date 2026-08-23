@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cover KG API — документация</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #14151d;
+    --panel: #1b1d29;
+    --panel-2: #21232f;
+    --hair: #33364a;
+    --text: #ece8df;
+    --text-dim: #9296ab;
+    --amber: #d9a441;
+    --amber-dim: #8a6a2e;
+    --teal: #4a9b8e;
+    --red: #c76a5e;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--text);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.6;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    margin:0 0 .4em;
+  }
+  code, pre, .mono{
+    font-family:'IBM Plex Mono', monospace;
+  }
+  a{color:var(--amber);}
+  .wrap{max-width:920px; margin:0 auto; padding:0 28px;}
+
+  /* ---- Hero: mixing-console strip ---- */
+  .hero{
+    padding:88px 0 56px;
+    border-bottom:1px solid var(--hair);
+    position:relative;
+    overflow:hidden;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--amber);
+    margin-bottom:18px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:7px;height:7px;border-radius:50%;
+    background:var(--teal);
+    box-shadow:0 0 0 3px rgba(74,155,142,.18);
+  }
+  .hero h1{
+    font-size:clamp(2.2rem, 5vw, 3.4rem);
+    color:var(--text);
+    max-width:14ch;
+  }
+  .hero p.lead{
+    color:var(--text-dim);
+    font-size:1.08rem;
+    max-width:52ch;
+    margin:18px 0 34px;
+  }
+  .cta-row{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:14px;
+    padding:13px 22px;
+    border-radius:3px;
+    text-decoration:none;
+    display:inline-block;
+    border:1px solid transparent;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .btn:hover{transform:translateY(-1px);}
+  .btn-primary{background:var(--amber); color:#1b1305; font-weight:600;}
+  .btn-ghost{border-color:var(--hair); color:var(--text);}
+
+  /* channel meter row — signature element */
+  .meters{
+    display:flex; gap:3px; margin-top:56px; height:64px; align-items:flex-end;
+  }
+  .meters span{
+    flex:1; background:linear-gradient(to top, var(--amber-dim), var(--teal) 85%);
+    border-radius:2px 2px 0 0; opacity:.55;
+  }
+
+  section{padding:64px 0;}
+  section.alt{background:var(--panel); border-top:1px solid var(--hair); border-bottom:1px solid var(--hair);}
+  .kicker{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--text-dim); margin-bottom:10px;
+  }
+
+  /* ---- Access card ---- */
+  .access-card{
+    background:var(--panel-2);
+    border:1px solid var(--hair);
+    border-radius:6px;
+    padding:30px 32px;
+    margin-top:28px;
+  }
+  .access-card ol{margin:0; padding-left:22px; color:var(--text-dim);}
+  .access-card li{margin-bottom:10px;}
+  .access-card li b{color:var(--text); font-weight:600;}
+  .contact-line{
+    margin-top:20px; padding-top:20px; border-top:1px dashed var(--hair);
+    font-family:'IBM Plex Mono', monospace; font-size:14px; color:var(--text-dim);
+  }
+
+  /* ---- Channel strips (endpoints) ---- */
+  .strip{
+    display:grid;
+    grid-template-columns:64px 1fr;
+    gap:20px;
+    padding:26px 0;
+    border-top:1px solid var(--hair);
+  }
+  .strip:last-child{border-bottom:1px solid var(--hair);}
+  .strip .ch{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--amber);
+    font-size:13px;
+    padding-top:3px;
+  }
+  .strip .ch .dot{
+    width:8px;height:8px;border-radius:50%;background:var(--teal);
+    display:block; margin-bottom:8px;
+  }
+  .strip h3{font-size:1.15rem; color:var(--text); margin-bottom:2px;}
+  .strip .path{
+    font-family:'IBM Plex Mono', monospace; font-size:13.5px; color:var(--teal);
+    margin-bottom:10px;
+  }
+  .strip p{color:var(--text-dim); margin:0 0 14px; font-size:.96rem;}
+  pre{
+    background:#101118;
+    border:1px solid var(--hair);
+    border-radius:5px;
+    padding:16px 18px;
+    overflow-x:auto;
+    font-size:13.2px;
+    color:#d8d4c8;
+    margin:0;
+  }
+  .params{font-size:.9rem; color:var(--text-dim); margin-top:10px;}
+  .params b{color:var(--text);}
+
+  /* ---- Errors table ---- */
+  table{width:100%; border-collapse:collapse; margin-top:20px; font-size:.92rem;}
+  th,td{text-align:left; padding:11px 14px; border-bottom:1px solid var(--hair);}
+  th{color:var(--text-dim); font-weight:500; font-family:'IBM Plex Mono', monospace; font-size:12px; text-transform:uppercase; letter-spacing:.06em;}
+  td.code{font-family:'IBM Plex Mono', monospace; color:var(--red);}
+
+  footer{padding:40px 0 60px; color:var(--text-dim); font-size:.88rem;}
+
+  @media (max-width:640px){
+    .strip{grid-template-columns:1fr;}
+    .strip .ch{flex-direction:row; display:flex; align-items:center; gap:8px;}
+    .strip .ch .dot{margin-bottom:0;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Cover KG API · v1.0.0</div>
+    <h1>Аудио, видео жана AI иштетүү — бир API аркылуу.</h1>
+    <p class="lead">Тempo/pitch өзгөртүү, видео форматын тууралоо, мультфильм-эффект жана AI генерация. Ачкыч алып, биринчи сурооңузду бүгүн жиберсеңиз болот.</p>
+    <div class="cta-row">
+      <a href="#access" class="btn btn-primary">Ачкыч алуу</a>
+      <a href="#endpoints" class="btn btn-ghost">Endpoint'терди көрүү</a>
+    </div>
+    <div class="meters" aria-hidden="true">
+      <span style="height:38%"></span><span style="height:62%"></span><span style="height:45%"></span>
+      <span style="height:80%"></span><span style="height:55%"></span><span style="height:70%"></span>
+      <span style="height:30%"></span><span style="height:58%"></span><span style="height:66%"></span>
+      <span style="height:42%"></span><span style="height:75%"></span><span style="height:50%"></span>
+    </div>
+  </div>
+</header>
+
+<section id="access" class="alt">
+  <div class="wrap">
+    <div class="kicker">Баштоо</div>
+    <h2>Апикейди кантип алам?</h2>
+    <p style="color:var(--text-dim); max-width:56ch;">Ачкычтар азырынча өз алдынча катталуу аркылуу берилбейт — администратор түзөт. Тартиби мындай:</p>
+    <div class="access-card">
+      <ol>
+        <li><b>Администраторго кайрылыңыз</b> — байланыш ыкмасы төмөндө көрсөтүлгөн.</li>
+        <li><b>Аты-жөнүңүздү / долбооруңуздун атын айтыңыз</b> — ачкыч ошол атка катталат, тизмеде ошону менен көрүнөт.</li>
+        <li><b>Ачкычты бир жолу гана аласыз</b> (<code>ck_...</code> түрүндө). Аны дароо коопсуз жерге сактап коюңуз — кайра көрсөтүлбөйт.</li>
+        <li><b>Ачкычты <code>X-API-Key</code> header'ине коюп</b>, төмөндөгү endpoint'терди чакыра баштайсыз.</li>
+      </ol>
+      <div class="contact-line">Байланыш: [email / Telegram мында коюлат]</div>
+    </div>
+  </div>
+</section>
+
+<section id="endpoints">
+  <div class="wrap">
+    <div class="kicker">Справочник</div>
+    <h2>Endpoint'тер</h2>
+
+    <div class="strip">
+      <div class="ch"><span class="dot"></span>01</div>
+      <div>
+        <h3>Файл жүктөө</h3>
+        <div class="path">POST /upload</div>
+        <p>Каалаган колдоого алынган файлды (mp3, wav, m4a, mp4, mov, webm, jpg, png) серверге жүктөйт, кийин иштетүү үчүн шилтеме кайтарат.</p>
+        <pre>curl -X POST https://ваш-домен/upload \
+  -H "X-API-Key: ck_..." \
+  -F "file=@song.mp3"</pre>
+      </div>
+    </div>
+
+    <div class="strip">
+      <div class="ch"><span class="dot"></span>02</div>
+      <div>
+        <h3>Аудио тempo/pitch</h3>
+        <div class="path">POST /audio/convert</div>
+        <p>MP3/WAV/M4A файлдын ылдамдыгын жана тонун өзгөртөт.</p>
+        <pre>curl -X POST https://ваш-домен/audio/convert \
+  -H "X-API-Key: ck_..." \
+  -F "file=@song.mp3" \
+  -F "tempo=1.1" \
+  -F "pitch=-2"</pre>
+        <div class="params"><b>tempo</b>: 0.5–2.0 · <b>pitch</b>: -12 — +12 (полутон)</div>
+      </div>
+    </div>
+
+    <div class="strip">
+      <div class="ch"><span class="dot"></span>03</div>
+      <div>
+        <h3>Видео форматтоо</h3>
+        <div class="path">POST /video/convert</div>
+        <p>Видеону берилген өлчөмгө (мис. reels/shorts үчүн 1080×1920) so-багытта тегиздеп кайра кыюусуз тууралайт.</p>
+        <pre>curl -X POST https://ваш-домен/video/convert \
+  -H "X-API-Key: ck_..." \
+  -F "file=@clip.mp4" \
+  -F "width=1080" \
+  -F "height=1920"</pre>
+      </div>
+    </div>
+
+    <div class="strip">
+      <div class="ch"><span class="dot"></span>04</div>
+      <div>
+        <h3>Мультфильм-эффект</h3>
+        <div class="path">POST /video/cartoon</div>
+        <p>Түстөрдү тегиздеп, четтерин ичке кара сызык менен басым коюп, "мультик" көрүнүшүн жаратат.</p>
+        <pre>curl -X POST https://ваш-домен/video/cartoon \
+  -H "X-API-Key: ck_..." \
+  -F "file=@clip.mp4" \
+  -F "strength=1.2"</pre>
+        <div class="params"><b>strength</b>: 0.2–2.0 (эффекттин күчү)</div>
+      </div>
+    </div>
+
+    <div class="strip">
+      <div class="ch"><span class="dot"></span>05</div>
+      <div>
+        <h3>AI генерация</h3>
+        <div class="path">POST /ai/generate</div>
+        <p>Текст боюнча видео же аудио (MP3) жаратат.</p>
+        <pre>curl -X POST https://ваш-домен/ai/generate \
+  -H "X-API-Key: ck_..." \
+  -F "prompt=токойдо жаанда бийлеген бала" \
+  -F "kind=video"</pre>
+        <div class="params"><b>kind</b>: video / audio</div>
+      </div>
+    </div>
+
+    <div class="strip">
+      <div class="ch"><span class="dot"></span>06</div>
+      <div>
+        <h3>Жыйынтыкты жүктөп алуу</h3>
+        <div class="path">GET /download/{filename}</div>
+        <p>Жогорудагы endpoint'тердин баары кайтарган <code>file</code> шилтемеси ушул жол менен ачылат.</p>
+        <pre>curl -O https://ваш-домен/download/a1b2c3....mp4</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <div class="kicker">Эске алыңыз</div>
+    <h2>Ката коддору</h2>
+    <table>
+      <tr><th>Код</th><th>Мааниси</th></tr>
+      <tr><td class="code">401</td><td>Ачкыч жок, жараксыз же өчүрүлгөн</td></tr>
+      <tr><td class="code">400</td><td>Файл форматы же параметр туура эмес</td></tr>
+      <tr><td class="code">413</td><td>Файл өлчөмү лимиттен ашкан (200MB)</td></tr>
+      <tr><td class="code">504</td><td>Иштетүү убакыты өттү (5 мүнөттөн ашык)</td></tr>
+      <tr><td class="code">502</td><td>AI провайдер жооп берген жок (/ai/generate гана)</td></tr>
+    </table>
+    <p style="color:var(--text-dim); margin-top:20px; font-size:.92rem;">Ачкыч башына сурооз саны чектелбейт. Жүктөлгөн жана иштетилген файлдар <b>1 сааттан</b> кийин серверден автоматтык өчүрүлөт — жыйынтыкты өз убагында жүктөп алыңыз.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">Cover KG API · документация ушул баракта гана сакталат, сервер өзү башка UI менен келбейт.</div>
+</footer>
+
+</body>
+</html>
